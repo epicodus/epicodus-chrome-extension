@@ -1,13 +1,4 @@
-const MORNING = "08:00:00"
-
-const ONEDAY = 1440
-
-const messageValues = {
-  type: "basic",
-  title: "Reminder!",
-  message: "Don't forget to sign in!",
-  iconUrl: "/chrome-store-assets/e_small.png",
-};
+// helper functions
 
 let clearCookies = function(cookieDomain) {
   chrome.cookies.getAll({domain: cookieDomain}, function(cookies) {
@@ -18,36 +9,34 @@ let clearCookies = function(cookieDomain) {
   });
 }
 
-let sendNotification = function(today) {
-  chrome.notifications.create(messageValues);
-  chrome.storage.local.set({"lastSent": today});
-}
-
 let openPopup = function() {
   window.open("popup.html", "extension_popup", "width=400,height=620,status=no,scrollbars=yes,resizable=no");
 }
 
-let triggerAlerts = function() {
-  chrome.storage.local.get("lastSent", function(message) {
-    let today = new Date().toDateString();
-    if (message.lastSent === today) { return; }
-    sendNotification(today);
-    openPopup();
+// debugging functions
+
+let clearStorage = function() {
+  chrome.storage.local.clear(function() {
+    var error = chrome.runtime.lastError;
+    if (error) {
+      console.error(error);
+    }
   });
 }
 
-// trigger popup and notification when chrome is launched
-triggerAlerts();
+let logAllStorage = function() {
+  chrome.storage.local.get(null, function(items) {
+    console.log(items);
+  });
+}
 
-let morningNotificationTime = new Date(new Date(Date.now()).toString().replace(/[0-9]+:[0-9]+:[0-9]+/, MORNING)).getTime();
+let getStorage = function(key) {
+  chrome.storage.local.get(key, function(lastSent) {
+    alert(lastSent[key]);
+  });
+}
 
-chrome.alarms.create("Sign In Reminder", { when: morningNotificationTime, periodInMinutes: ONEDAY })
-
-chrome.alarms.onAlarm.addListener(function(alarm) {
-  triggerAlerts();
-});
-
-// the functions are `var` because `let` is not accessible when called from popup
+// functions called from front-end (`var` because `let` is not accessible when called from popup)
 
 var epicenterLogin = function(credentials) {
   clearCookies("epicenter.epicodus.com");
@@ -103,3 +92,63 @@ var attendanceLogout = function(credentials) {
     );
   });
 }
+
+// notifications
+
+const ONEDAY = 1440
+
+const ALARMS = {
+  "sign-in-reminder": {
+    title: "Sign In Reminder",
+    message: "Don't foget to sign in!",
+    time: "8:00",
+    requireInteraction: false
+  }
+}
+
+chrome.runtime.onInstalled.addListener(function() {
+  for (let key of Object.keys(ALARMS)) {
+    // set alarms
+    hour = parseInt(ALARMS[key].time.split(":")[0]);
+    minute = parseInt(ALARMS[key].time.split(":")[1]);
+    time = new Date().setHours(hour, minute, 0, 0);
+    chrome.alarms.create(key, { when: time, periodInMinutes: ONEDAY });
+
+    // initialize localStorage objects
+    let localStorageObject = {};
+    localStorageObject[key] = "";
+    chrome.storage.local.set(localStorageObject);
+  }
+});
+
+let sendNotification = function(alarmName) {
+  // actually send the notification
+  let messageValues = {
+    type: "basic",
+    iconUrl: "/chrome-store-assets/e_small.png",
+    title: ALARMS[alarmName].title,
+    message: ALARMS[alarmName].message,
+    requireInteraction: ALARMS[alarmName].requireInteraction
+  }
+  chrome.notifications.create(messageValues);
+
+  // add last run time to localStorage object
+  let localStorageObject = {};
+  localStorageObject[alarmName] = new Date().toDateString();
+  chrome.storage.local.set(localStorageObject);
+}
+
+// run every time any alarm is triggered
+chrome.alarms.onAlarm.addListener(function(alarm) {
+  chrome.storage.local.get(alarm.name, function(lastSent) {
+    let alarmName = Object.keys(lastSent)[0];
+
+    // send notification if alarm not already triggered today
+    if (lastSent[alarmName] !== new Date().toDateString()) {
+      sendNotification(alarmName);
+      if (alarmName == "sign-in-reminder") {
+        openPopup();
+      }
+    }
+  });
+});
