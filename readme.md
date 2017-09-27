@@ -1,5 +1,9 @@
 # Epicodus Chrome Extension
 
+This is a fork of a [project](https://github.com/spenceralan/epicodus-chrome-extension) created by Epicodus students [Spencer Ruiz](https://github.com/spenceralan) and [Kai de Rochemont](https://github.com/Kaidero).
+
+Original README below:
+
 This project will save the world! Or it might help you remember to sign in when you start your day at Epicodus. Or both!
 
 If you have ever forgotten the url to the Epicodus sign in and out page, can't for the life of you remember the url to Epicenter, or never knew and don't know where to find the link to the Epicodus queue... this app is for you!
@@ -21,7 +25,7 @@ _Early sign-out warning:_
 
 There are two ways to install this app on your machine! The first is the easiest, it is hosted in the Chrome Extension Store for free!
 
-https://chrome.google.com/webstore/detail/epicodus-login/dfcolmifpnlbielchjeemopkinnkammj
+**INSERT URL HERE**
 
 NOTE: The store will always feature the latest stable version. This app is still in development. For new and experimental features you can clone the app here and install it to Chrome manually.
 
@@ -43,6 +47,7 @@ After that, its as simple as clicking "Load unpacked extension..." and selecting
 
 * Spencer Ruiz
 * Kai de Rochemont
+* Mike Goren
 
 ## License
 

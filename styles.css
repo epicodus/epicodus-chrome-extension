@@ -4,7 +4,7 @@ body {
   background-color: #FCFCFC;
 }
 
-h4, a {
+h4, a, p {
   font-family: 'Helvetica Neue', 'Open Sans' , sans-serif;
   font-weight: 300;
 }
@@ -87,6 +87,30 @@ button {
 
 .queue {
   background-color: #f05a26;
+}
+
+#about-wrapper {
+  margin-top: 15px;
+  text-align: center;
+}
+
+#about-button {
+  background-color: #E6E6E6;
+  margin: auto;
+  width: 132px;
+  height: 25px;
+  padding-top: 4px;
+  font-size: 9pt;
+  color: black;
+}
+
+#about-text a {
+  color: grey !important;
+  /*text-decoration: underline !important;*/
+}
+
+#about-text a:hover {
+  text-decoration: underline !important;
 }
 
 #warning {

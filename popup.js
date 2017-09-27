@@ -23,10 +23,10 @@ let setFocusTo = function(elementID) {
 }
 
 $(document).ready(function() {
-  hideForms('#attendance-out', '#epicenter-in', '#attendance-in');
+  hideForms('#attendance-out', '#epicenter-in', '#attendance-in', '#about-text');
 
   $('#attendance-in-button').click(function() {
-    hideForms('#attendance-out', '#epicenter-in');
+    hideForms('#attendance-out', '#epicenter-in', '#about-wrapper');
     hideLogo();
     showForms('#attendance-in');
     setFocusTo("email-1");
@@ -47,7 +47,7 @@ $(document).ready(function() {
   });
 
   $('#attendance-out-button').click(function(){
-    hideForms('#epicenter-in', '#attendance-in');
+    hideForms('#epicenter-in', '#attendance-in', '#about-wrapper');
     hideLogo();
     showForms('#attendance-out');
     setFocusTo("attendance-out-email");
@@ -89,7 +89,7 @@ $(document).ready(function() {
   });
 
   $('#epicenter-in-button').click(function(){
-    hideForms('#attendance-in', '#attendance-out');
+    hideForms('#attendance-in', '#attendance-out', '#about-wrapper');
     hideLogo();
     showForms('#epicenter-in');
     setFocusTo("epicenter-in-email")
@@ -125,6 +125,11 @@ $(document).ready(function() {
   $('#epicodus-forum-button').click(function(){
     chrome.tabs.create({url: "http://forum.epicodus.com/login"});
     window.close();
+  });
+
+  $('#about-button').click(function() {
+    hideForms('#about-button');
+    $('#about-text').show();
   });
 
 });
