@@ -1,4 +1,4 @@
-const SEATTLE_IP_ADDRESS = "38.140.27.106"
+const SEATTLE_IP_ADDRESS = "50.200.105.2"
 
 let background = chrome.extension.getBackgroundPage();
 
